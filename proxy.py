@@ -23,6 +23,15 @@ EXACT_HEADERS = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36",
 }
 
+# PROXY CONFIGURATION
+# Format: http://username:password@ip:port
+# We read this from Render Environment Variables for security.
+PROXY_URL = os.environ.get("PROXY_URL", "http://lrxwtgbq:k05l1d60pv1l@38.154.185.97:6370")
+PROXIES = {
+    "http": PROXY_URL,
+    "https": PROXY_URL
+}
+
 # Create a persistent session with browser impersonation
 session = requests.Session()
 session.impersonate = "chrome124"
@@ -42,25 +51,25 @@ def proxy():
 
     # Thread-safe copy of headers
     req_headers = EXACT_HEADERS.copy()
-    
-    # Set Referer and Origin to match the curl command EXACTLY
     req_headers["referer"] = "https://frame.y2meta-uk.com/"
     req_headers["origin"] = "https://frame.y2meta-uk.com"
 
-    print(f"[→] Proxying: {target_url[:120]}...")
+    print(f"[→] Proxying via {PROXY_URL.split('@')[1]}: {target_url[:120]}...")
 
     try:
         # allow_redirects=True mimics `curl -L`
+        # proxies=PROXIES routes the traffic through your residential/datacenter proxy
         resp = session.get(
             target_url, 
             stream=True, 
             headers=req_headers, 
+            proxies=PROXIES,
             allow_redirects=True
         )
         print(f"[←] Status: {resp.status_code}")
 
         if resp.status_code == 403:
-            return "403 Forbidden – The tunnel URL may have expired.", 403
+            return "403 Forbidden – The tunnel URL may have expired or the proxy IP was rejected.", 403
 
         # Exclude headers that break Flask streaming or are handled automatically
         excluded_headers = {
