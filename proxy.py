@@ -149,7 +149,7 @@ def download():
                 encoded_tunnel = urllib.parse.quote(tunnel_url, safe='')
                 encoded_proxy = urllib.parse.quote(proxy_str, safe='')
                 
-                proxy_download_url = f"{request.host_url.rstrip('/')}proxy?url={encoded_tunnel}&proxy={encoded_proxy}"
+                proxy_download_url = f"{request.host_url.rstrip('/')}/proxy?url={encoded_tunnel}&proxy={encoded_proxy}"
                 
                 conv_data["url"] = proxy_download_url
                 conv_data["proxy_used"] = proxy_str
