@@ -153,6 +153,9 @@ def download():
                 
                 conv_data["url"] = proxy_download_url
                 conv_data["proxy_used"] = proxy_str
+                # ---- ONLY CHANGE: add the original tunnel URL as a separate field ----
+                conv_data["original_link"] = tunnel_url
+                # --------------------------------------------------------------------
                 return jsonify(conv_data)
             else:
                 continue  # Try next proxy if status isn't "tunnel"
