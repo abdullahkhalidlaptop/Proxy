@@ -25,7 +25,7 @@ EXACT_HEADERS = {
 
 # Create a persistent session with browser impersonation
 session = requests.Session()
-session.impersonate = "chrome131"
+session.impersonate = "chrome124"
 
 @app.route('/proxy')
 def proxy():
